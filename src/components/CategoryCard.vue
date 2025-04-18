@@ -1,7 +1,7 @@
 <template>
   <div class="col-6 col-md-3">
     <router-link
-      :to="`#`"
+      :to="`/products?categoryId=${category.id}&categoryName=${category.name}`"
       class="text-decoration-none text-dark"
     >
       <div class="card h-100 shadow-sm border-0">

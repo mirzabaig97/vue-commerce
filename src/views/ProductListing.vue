@@ -1,34 +1,40 @@
 <template>
   <div class="container py-4">
-    <h1 class="mb-3">Products</h1>
+    <h1 class="mb-3">
+      Products <span v-if="categoryName">in "{{ categoryName }}"</span>
+    </h1>
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <input
+          v-model="searchQuery"
+          type="text"
+          class="form-control"
+          placeholder="Search products..."
+        />
+      </div>
+    </div>
 
     <div class="row row-cols-2 row-cols-md-4 g-4">
       <div class="col" v-for="product in products" :key="product.id">
-        <img
-          v-if="product?.images?.[0]"
-          :src="product.images[0]"
-          class="card-img-top"
-          :alt="product.title"
-          loading="lazy"
-        />
-        <div class="card-body">
-          <h5 class="card-title">{{ product.title }}</h5>
-          <p class="card-text">${{ product.price }}</p>
-
-          <p v-if="product?.category?.name" class="text-muted">
-            Category: {{ product.category.name }}
-          </p>
-        </div>
+        <ProductCard :product="product" showCategory />
       </div>
     </div>
   </div>
 </template>
   
 <script setup>
-import { ref, onMounted } from "vue";
-import axios from "axios";
 
+import { ref, onMounted, watch } from "vue";
+import { useRoute } from "vue-router";
+import axios from "axios";
+import ProductCard from "../components/ProductCard.vue";
+
+const route = useRoute();
 const products = ref([]);
+
+const categoryId = ref(route.query.categoryId || "");
+const categoryName = ref(route.query.categoryName || "");
 
 const fetchProducts = async () => {
   try {
@@ -44,4 +50,12 @@ const fetchProducts = async () => {
 
 onMounted(fetchProducts);
 
+watch(
+  () => route.query.categoryId,
+  (newId) => {
+    categoryId.value = newId;
+    categoryName.value = route.query.categoryName || "";
+    fetchProducts();
+  }
+);
 </script>

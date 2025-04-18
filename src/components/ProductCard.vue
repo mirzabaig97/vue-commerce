@@ -1,7 +1,6 @@
 <template>
   <div class="card h-100 shadow-sm">
     <img
-      v-if="product?.images?.[0]"
       :src="product.images[0]"
       class="card-img-top"
       :alt="product.title"
@@ -16,7 +15,7 @@
     </div>
     <div class="card-footer d-flex justify-content-between align-items-center">
       <router-link
-        :to="'#'"
+        :to="`/product/${product.id}`"
         class="btn btn-sm btn-outline-primary"
       >
         View

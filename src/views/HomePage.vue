@@ -1,13 +1,17 @@
 <template>
   <div class="container py-4">
     <h1 class="mb-4 text-center full-pill-heading">Product Categories</h1>
-    {{ categories }}
+    <div class="row g-4 mb-5">
+      <CategoryCard v-for="cat in categories" :key="cat" :category="cat" />
+    </div>
   </div>
 </template>
   
 <script setup>
 import { onMounted, ref } from "vue";
 import axios from "axios";
+
+import CategoryCard from "../components/CategoryCard.vue";
 
 const categories = ref([]);
 

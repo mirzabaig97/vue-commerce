@@ -7,6 +7,7 @@
     <div class="row mb-3">
       <div class="col-md-6">
         <input
+          v-model="searchQuery"
           type="text"
           class="form-control"
           placeholder="Search products..."
@@ -20,7 +21,7 @@
       </div>
     </div>
 
-    <nav class="mt-4" v-if="products.length > perPage">
+    <nav class="mt-4" v-if="filteredProducts.length > perPage">
       <ul class="pagination justify-content-center">
         <li class="page-item" :class="{ disabled: page === 1 }">
           <button class="page-link" @click="page--">Previous</button>
@@ -30,7 +31,7 @@
         </li>
         <li
           class="page-item"
-          :class="{ disabled: end >= products.length }"
+          :class="{ disabled: end >= filteredProducts.length }"
         >
           <button class="page-link" @click="page++">Next</button>
         </li>
@@ -40,8 +41,6 @@
 </template>
   
 <script setup>
-const isLoading = ref(true);
-
 import { ref, computed, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import axios from "axios";
@@ -49,6 +48,7 @@ import ProductCard from "../components/ProductCard.vue";
 
 const route = useRoute();
 const products = ref([]);
+const searchQuery = ref("");
 const page = ref(1);
 const perPage = 8;
 
@@ -57,7 +57,6 @@ const categoryName = ref(route.query.categoryName || "");
 
 const fetchProducts = async () => {
   try {
-    isLoading.value = true;
     let res;
     if (categoryId.value) {
       res = await axios.get(
@@ -86,9 +85,17 @@ watch(
   }
 );
 
+const filteredProducts = computed(() => {
+  let result = products.value.filter((p) =>
+    p.title.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+
+  return result;
+});
+
 const start = computed(() => (page.value - 1) * perPage);
 const end = computed(() => start.value + perPage);
 const paginatedProducts = computed(() =>
-products.value.slice(start.value, end.value)
+  filteredProducts.value.slice(start.value, end.value)
 );
 </script>

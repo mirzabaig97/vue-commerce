@@ -22,12 +22,15 @@
         <span class="badge bg-secondary text-capitalize">{{
           product.category.name
         }}</span>
-        <div class="mt-4">
+        <div class="mt-4" v-if="!isFavorited">
           <button class="btn btn-outline-warning" @click="toggleFavorite">
-            <span :class="isFavorited ? 'text-warning' : 'text-secondary'">
-              Add to Favorite
-            </span>
-            ⭐
+            <span class="text-secondary">⭐</span>
+            Favorite
+          </button>
+        </div>
+        <div class="mt-4" v-else>
+          <button class="btn btn-outline-secondary" @click="toggleFavorite">
+            <span class="text-secondary">Remove From Favorite</span>
           </button>
         </div>
       </div>
@@ -39,20 +42,17 @@
 import { onMounted, ref, computed } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
-import axios from "axios";
 
 const route = useRoute();
 const store = useStore();
-
-const product = ref(null);
 const loaded = ref(false);
 
-onMounted(async () => {
-  const res = await axios.get(
-    `https://api.escuelajs.co/api/v1/products/${route.params.id}`
-  );
-  product.value = res.data;
-  store.dispatch("addToLastVisited", res.data);
+const product = computed(() => store.getters.getProductById(route.params.id));
+
+onMounted(() => {
+  if (product.value) {
+    store.dispatch("addToLastVisited", product.value);
+  }
 });
 
 const isFavorited = computed(() =>
@@ -63,3 +63,4 @@ function toggleFavorite() {
   store.dispatch("toggleFavorite", product.value);
 }
 </script>
+

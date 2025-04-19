@@ -36,9 +36,7 @@
         </li>
       </ul>
 
-      <button class="btn btn-outline-light" @click="$emit('toggle-dark-mode')">
-        🌓
-      </button>
+      <button class="btn btn-outline-light" @click="toggleDarkMode">🌓</button>
     </div>
   </nav>
 </template>
@@ -50,4 +48,8 @@ import { useStore } from "vuex";
 const store = useStore();
 
 const favoritesCount = computed(() => store.getters.favorites.length);
+
+const toggleDarkMode = () => {
+  store.dispatch("toggleDarkMode");
+};
 </script>

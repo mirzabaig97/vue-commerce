@@ -21,16 +21,11 @@ const store = useStore();
 
 onMounted(() => {
   store.dispatch("initCategoriesAndProducts");
+  store.dispatch("initializeDarkMode");
 });
 </script>
 
-
-
 <style>
-body {
-  margin-bottom: 50px !important;
-}
-
 .pill-heading {
   display: inline-block;
   padding: 0.5rem 1.25rem;
@@ -39,7 +34,6 @@ body {
   font-weight: 600;
   border-radius: 50rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  margin-bottom: 1rem;
 }
 
 .full-pill-heading {
@@ -51,7 +45,6 @@ body {
   text-align: center;
   border-radius: 100px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
-  margin-bottom: 2rem;
   font-size: 1.25rem;
   letter-spacing: 0.5px;
 }
@@ -68,5 +61,20 @@ body {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+body.dark-mode {
+  background-color: #121212;
+  color: #eee;
+}
+
+body.dark-mode .table {
+  background-color: #212529;
+  color: #fff;
+}
+
+body.dark-mode .table th,
+body.dark-mode .table td {
+  border-color: #444;
 }
 </style>

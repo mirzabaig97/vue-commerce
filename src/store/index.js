@@ -1,19 +1,22 @@
 import { createStore } from "vuex";
 import axios from "axios";
 
-const localStorageKey = "categoriesWithProducts";
+const LOCAL_STORAGE_KEY = "categoriesWithProducts";
+const DARK_MODE_KEY = 'darkMode';
 
 export default createStore({
     state: {
-        categories: JSON.parse(localStorage.getItem(localStorageKey)) || [],
+        categories: JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [],
         favorites: JSON.parse(localStorage.getItem("favorites")) || [],
         lastVisited: JSON.parse(localStorage.getItem("lastVisited")) || [],
+        lastVisited: JSON.parse(localStorage.getItem("lastVisited")) || [],
+        darkMode: JSON.parse(localStorage.getItem(DARK_MODE_KEY)) || false,
     },
 
     mutations: {
         setCategories(state, categories) {
             state.categories = categories;
-            localStorage.setItem(localStorageKey, JSON.stringify(categories));
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(categories));
         },
         addToFavorites(state, product) {
             if (!state.favorites.some((p) => p.id === product.id)) {
@@ -31,6 +34,15 @@ export default createStore({
                 ...state.lastVisited.filter((p) => p.id !== product.id),
             ].slice(0, 5);
             localStorage.setItem("lastVisited", JSON.stringify(state.lastVisited));
+        },
+        clearFavorites(state) {
+            state.favorites = [];
+            localStorage.setItem("favorites", JSON.stringify([]));
+        },
+        setDarkMode(state, isDark) {
+            state.darkMode = isDark;
+            localStorage.setItem(DARK_MODE_KEY, JSON.stringify(isDark));
+            document.body.classList.toggle('dark-mode', isDark); 
         },
     },
 
@@ -64,7 +76,7 @@ export default createStore({
                     commit("setCategories", freshCategories);
                     console.log("Categories updated from API.");
                 } else {
-                    console.log(" Local categories up-to-date.");
+                    console.log("categories up-to-date.");
                 }
             } catch (error) {
                 console.error("Failed to fetch categories with products", error);
@@ -85,6 +97,18 @@ export default createStore({
             if (isFav) dispatch("removeFromFavorites", product.id);
             else dispatch("addToFavorites", product);
         },
+        clearFavorites({ commit }) {
+            commit("clearFavorites");
+        },
+
+        toggleDarkMode({ commit, state }) {
+            commit('setDarkMode', !state.darkMode);
+        },
+
+        initializeDarkMode({ commit }) {
+            const saved = JSON.parse(localStorage.getItem(DARK_MODE_KEY));
+            if (saved) commit('setDarkMode', saved);
+        },
     },
 
     getters: {
@@ -97,5 +121,6 @@ export default createStore({
                 .find((p) => p.id === Number(id)),
         favorites: (state) => state.favorites,
         lastVisited: (state) => state.lastVisited,
+        darkMode: (state) => state.darkMode
     },
 });

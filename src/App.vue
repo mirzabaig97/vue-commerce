@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <TheHeader />
+  <div :class="{ dark: isDarkMode }">
+    <TheHeader @toggle-dark-mode="toggleDarkMode" />
     <router-view v-slot="{ Component }">
       <transition name="fade" mode="out-in">
         <component :is="Component" />
@@ -10,9 +10,12 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { useStore } from "vuex";
 import TheHeader from "./components/TheHeader.vue";
+
+const isDarkMode = ref(false);
+const toggleDarkMode = () => (isDarkMode.value = !isDarkMode.value);
 
 const store = useStore();
 
@@ -21,7 +24,12 @@ onMounted(() => {
 });
 </script>
 
+
+
 <style>
+body {
+  margin-bottom: 50px !important;
+}
 
 .pill-heading {
   display: inline-block;

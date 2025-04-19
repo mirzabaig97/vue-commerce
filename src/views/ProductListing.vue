@@ -184,7 +184,7 @@ const toggleFavorite = (product) => {
 };
 
 const isValidImage = (url) => {
-  return /\.(jpe?g|png|svg)$/i.test(url);
+  return /\.(jpg|jpeg|png|svg)$/i.test(url);
 };
 
 const getProductImage = (product) => {

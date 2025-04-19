@@ -22,8 +22,28 @@
       >
         View
       </router-link>
-      <button @click="toggleFavorite" class="btn btn-sm">
-        <span :class="isFavorite ? 'text-warning' : 'text-secondary'">⭐</span>
+
+      <button
+        v-if="!(hideIfFavorited && isFavorite)"
+        @click="toggleFavorite"
+        class="btn btn-sm"
+      >
+        <span
+          v-if="!isFavorite"
+          :class="isFavorite ? 'text-warning' : 'text-secondary'"
+          >⭐</span
+        >
+        <span v-else :class="isFavorite ? 'text-secondary' : 'text-secondary'"
+          >Remove From Favorite</span
+        >
+      </button>
+
+      <button v-else @click="toggleFavorite" class="btn btn-sm">
+        <span
+          v-if="isFavorite"
+          :class="isFavorite ? 'text-secondary' : 'text-secondary'"
+          >Remove From Favorite</span
+        >
       </button>
     </div>
   </div>
@@ -36,6 +56,10 @@ import { useStore } from "vuex";
 const props = defineProps({
   product: Object,
   showCategory: Boolean,
+  hideIfFavorited: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const store = useStore();

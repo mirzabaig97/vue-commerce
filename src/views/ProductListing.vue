@@ -13,6 +13,15 @@
           placeholder="Search products..."
         />
       </div>
+      <div class="col-md-6 text-md-end mt-2 mt-md-0">
+        <select class="form-select w-auto d-inline" v-model="sortBy">
+          <option value="">Sort</option>
+          <option value="price-asc">Price: Low to high</option>
+          <option value="price-desc">Price: High to low</option>
+          <option value="name-asc">Name A-Z</option>
+          <option value="name-desc">Name Z-A</option>
+        </select>
+      </div>
     </div>
 
     <div v-if="isLoading" class="text-center my-5">
@@ -71,6 +80,7 @@ const store = useStore();
 const route = useRoute();
 
 const searchQuery = ref("");
+const sortBy = ref("");
 const page = ref(1);
 const perPage = 8;
 
@@ -91,6 +101,21 @@ const filteredProducts = computed(() => {
   let result = allProducts.value.filter((p) =>
     p.title.toLowerCase().includes(searchQuery.value.toLowerCase())
   );
+
+  switch (sortBy.value) {
+    case "price-asc":
+      result.sort((a, b) => a.price - b.price);
+      break;
+    case "price-desc":
+      result.sort((a, b) => b.price - a.price);
+      break;
+    case "name-asc":
+      result.sort((a, b) => a.title.localeCompare(b.title));
+      break;
+    case "name-desc":
+      result.sort((a, b) => b.title.localeCompare(a.title));
+      break;
+  }
 
   return result;
 });

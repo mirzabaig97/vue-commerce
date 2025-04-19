@@ -64,7 +64,7 @@ export default createStore({
                     commit("setCategories", freshCategories);
                     console.log("Categories updated from API.");
                 } else {
-                    console.log("Local categories up-to-date.");
+                    console.log(" Local categories up-to-date.");
                 }
             } catch (error) {
                 console.error("Failed to fetch categories with products", error);

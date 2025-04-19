@@ -38,11 +38,18 @@
               @click="removeFavorite(product)"
               class="btn btn-sm text-warning"
             >
-            Add to favorite
+              ⭐
             </button>
           </div>
         </div>
       </div>
+    </div>
+
+    <div v-else class="text-center py-5">
+      <p class="lead">You haven't favorited anything yet.</p>
+      <router-link to="/products" class="btn btn-outline-primary"
+        >Browse Products</router-link
+      >
     </div>
   </div>
 </template>

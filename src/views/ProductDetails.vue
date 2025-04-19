@@ -43,6 +43,7 @@ import axios from "axios";
 
 const route = useRoute();
 const store = useStore();
+
 const product = ref(null);
 const loaded = ref(false);
 
@@ -51,6 +52,7 @@ onMounted(async () => {
     `https://api.escuelajs.co/api/v1/products/${route.params.id}`
   );
   product.value = res.data;
+  store.dispatch("addToLastVisited", res.data);
 });
 
 const isFavorited = computed(() =>

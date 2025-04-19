@@ -2,7 +2,8 @@ import { createStore } from 'vuex';
 
 export default createStore({
     state: {
-        favorites: JSON.parse(localStorage.getItem("favorites")) || []
+        favorites: JSON.parse(localStorage.getItem("favorites")) || [],
+        lastVisited: JSON.parse(localStorage.getItem("lastVisited")) || [],
     },
 
     mutations: {
@@ -19,6 +20,14 @@ export default createStore({
                 state.favorites.splice(index, 1);
                 localStorage.setItem("favorites", JSON.stringify(state.favorites));
             }
+        },
+
+        addToLastVisited(state, product) {
+            state.lastVisited = [
+                product,
+                ...state.lastVisited.filter(p => p.id !== product.id)
+            ].slice(0, 5);
+            localStorage.setItem("lastVisited", JSON.stringify(state.lastVisited));
         }
     },
 
@@ -36,10 +45,14 @@ export default createStore({
             } else {
                 dispatch("addToFavorites", product);
             }
+        },
+        addToLastVisited({ commit }, product) {
+            commit("addToLastVisited", product);
         }
     },
 
     getters: {
-        favorites: (state) => state.favorites
+        favorites: (state) => state.favorites,
+        lastVisited: (state) => state.lastVisited
     }
 });

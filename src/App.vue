@@ -10,14 +10,18 @@
 </template>
 
 <script setup>
+import { onMounted } from "vue";
+import { useStore } from "vuex";
 import TheHeader from "./components/TheHeader.vue";
 
+const store = useStore();
+
+onMounted(() => {
+  store.dispatch("initCategoriesAndProducts");
+});
 </script>
 
 <style>
-body {
-  margin-bottom: 50px !important;
-}
 
 .pill-heading {
   display: inline-block;

@@ -36,9 +36,9 @@
             >
             <button
               @click="removeFavorite(product)"
-              class="btn btn-sm text-warning"
+              class="btn btn-sm text-secondary"
             >
-              ⭐
+              Remove From Favorite
             </button>
           </div>
         </div>

@@ -9,7 +9,14 @@
           :src="category.image"
           :alt="category.name"
           class="card-img-top"
+          @load="loaded = true"
+          v-show="loaded"
         />
+        <div
+          v-if="!loaded"
+          class="placeholder-wave card-img-top"
+          style="height: 160px; background: #f0f0f0"
+        ></div>
         <div class="card-body text-center">
           <h6 class="card-title text-capitalize">{{ category.name }}</h6>
         </div>
@@ -19,12 +26,7 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
 defineProps({ category: Object });
+const loaded = ref(false);
 </script>
-
-<style scoped>
-  .custom-card-img {
-    height: 160px;
-    background: #f0f0f0
-  }
-</style>

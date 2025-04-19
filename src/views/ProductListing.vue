@@ -15,13 +15,20 @@
       </div>
     </div>
 
-    <div class="row row-cols-2 row-cols-md-4 g-4">
+    <div v-if="isLoading" class="text-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <h3>Loading...</h3>
+    </div>
+
+    <div v-else class="row row-cols-2 row-cols-md-4 g-4">
       <div class="col" v-for="product in paginatedProducts" :key="product.id">
         <ProductCard :product="product" showCategory />
       </div>
     </div>
 
-    <nav class="mt-4" v-if="filteredProducts.length > perPage">
+    <nav class="mt-4" v-if="!isLoading && filteredProducts.length > perPage">
       <ul class="pagination justify-content-center">
         <li class="page-item" :class="{ disabled: page === 1 }">
           <button class="page-link" @click="page--">Previous</button>
@@ -41,6 +48,8 @@
 </template>
   
 <script setup>
+const isLoading = ref(true);
+
 import { ref, computed, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import axios from "axios";
@@ -49,6 +58,7 @@ import ProductCard from "../components/ProductCard.vue";
 const route = useRoute();
 const products = ref([]);
 const searchQuery = ref("");
+const sortBy = ref("");
 const page = ref(1);
 const perPage = 8;
 
@@ -57,6 +67,7 @@ const categoryName = ref(route.query.categoryName || "");
 
 const fetchProducts = async () => {
   try {
+    isLoading.value = true;
     let res;
     if (categoryId.value) {
       res = await axios.get(
@@ -70,7 +81,7 @@ const fetchProducts = async () => {
   } catch (err) {
     console.error("Failed to fetch products:", err);
   } finally {
-    console.log(products.value);
+    isLoading.value = false;
   }
 };
 
@@ -89,7 +100,6 @@ const filteredProducts = computed(() => {
   let result = products.value.filter((p) =>
     p.title.toLowerCase().includes(searchQuery.value.toLowerCase())
   );
-
   return result;
 });
 

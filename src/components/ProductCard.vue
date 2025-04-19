@@ -23,7 +23,7 @@
         View
       </router-link>
       <button @click="toggleFavorite" class="btn btn-sm">
-        <span :class="isFavorite ? 'text-warning' : 'text-secondary'">Add to favorite</span>
+        <span :class="isFavorite ? 'text-warning' : 'text-secondary'">⭐</span>
       </button>
     </div>
   </div>

@@ -9,7 +9,14 @@
       placeholder="Search categories..."
     />
 
-    <div class="row row-cols-2 row-cols-md-4 g-4 mb-3 mt-4">
+    <div v-if="isLoading" class="text-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <h3>Loading...</h3>
+    </div>
+
+    <div v-else class="row row-cols-2 row-cols-md-4 g-4 mb-3 mt-4">
       <CategoryCard
         v-for="cat in filteredCategories"
         :key="cat.name"
@@ -19,7 +26,8 @@
   </div>
 </template>
   
-<script setup>
+  <script setup>
+const isLoading = ref(true);
 import { onMounted, ref, computed } from "vue";
 import axios from "axios";
 import CategoryCard from "../components/CategoryCard.vue";
@@ -40,7 +48,7 @@ onMounted(async () => {
   } catch (err) {
     console.error("Failed to fetch categories:", err);
   } finally {
-    console.log(categories.value);
+    isLoading.value = false;
   }
 });
 </script>

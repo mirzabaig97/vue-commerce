@@ -13,27 +13,27 @@
       <div class="spinner-border text-primary" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
-      <h3>Loading...</h3>
     </div>
 
     <div v-else class="row row-cols-2 row-cols-md-4 g-4 mb-3 mt-4">
       <CategoryCard
         v-for="cat in filteredCategories"
-        :key="cat.name"
+        :key="cat.id"
         :category="cat"
       />
     </div>
   </div>
 </template>
-  
-  <script setup>
-const isLoading = ref(true);
-import { onMounted, ref, computed } from "vue";
-import axios from "axios";
+
+<script setup>
+import { ref, computed, onMounted } from "vue";
+import { useStore } from "vuex";
 import CategoryCard from "../components/CategoryCard.vue";
 
-const categories = ref([]);
 const searchTerm = ref("");
+const store = useStore();
+
+const categories = computed(() => store.getters.categories);
 
 const filteredCategories = computed(() =>
   categories.value.filter((c) =>
@@ -41,15 +41,9 @@ const filteredCategories = computed(() =>
   )
 );
 
-onMounted(async () => {
-  try {
-    const res = await axios.get("https://api.escuelajs.co/api/v1/categories");
-    categories.value = res.data;
-  } catch (err) {
-    console.error("Failed to fetch categories:", err);
-  } finally {
-    isLoading.value = false;
-  }
+const isLoading = computed(() => store.getters.categories.length === 0);
+
+onMounted(() => {
+  store.dispatch("fetchCategories");
 });
 </script>
-  

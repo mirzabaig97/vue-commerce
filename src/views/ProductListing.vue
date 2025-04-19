@@ -45,28 +45,70 @@
       <p class="lead">No results found for "{{ searchQuery }}".</p>
     </div>
 
-    <div v-else class="row row-cols-2 row-cols-md-4 g-4">
-      <div class="col" v-for="product in paginatedProducts" :key="product.id">
-        <ProductCard :product="product" showCategory hideIfFavorited />
+    <div v-else>
+      <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+          <thead class="table-light">
+            <tr>
+              <th scope="col">Image</th>
+              <th scope="col">Name</th>
+              <th scope="col">Category</th>
+              <th scope="col">Price</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="product in paginatedProducts" :key="product.id">
+              <td style="width: 100px">
+                <img
+                  :src="getProductImage(product)"
+                  :alt="product.title"
+                  class="img-fluid rounded"
+                  style="max-height: 60px; object-fit: cover"
+                />
+              </td>
+              <td>
+                <router-link :to="`/product/${product.id}`" class="me-2">
+                  {{ product.title }}
+                </router-link>
+              </td>
+              <td>{{ product.category?.name || "N/A" }}</td>
+              <td>${{ product.price }}</td>
+              <td>
+                <button
+                  class="btn btn-sm"
+                  :class="
+                    isFavorite(product.id)
+                      ? 'btn-outline-secondary'
+                      : 'btn-outline-warning'
+                  "
+                  @click="toggleFavorite(product)"
+                >
+                  {{ isFavorite(product.id) ? "Remove favorite" : "⭐" }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </div>
 
-    <nav class="mt-4" v-if="filteredProducts.length > perPage">
-      <ul class="pagination justify-content-center">
-        <li class="page-item" :class="{ disabled: page === 1 }">
-          <button class="page-link" @click="page--">Previous</button>
-        </li>
-        <li class="page-item disabled">
-          <span class="page-link">Page {{ page }}</span>
-        </li>
-        <li
-          class="page-item"
-          :class="{ disabled: end >= filteredProducts.length }"
-        >
-          <button class="page-link" @click="page++">Next</button>
-        </li>
-      </ul>
-    </nav>
+      <nav class="mt-4" v-if="filteredProducts.length > perPage">
+        <ul class="pagination justify-content-center">
+          <li class="page-item" :class="{ disabled: page === 1 }">
+            <button class="page-link" @click="page--">Previous</button>
+          </li>
+          <li class="page-item disabled">
+            <span class="page-link">Page {{ page }}</span>
+          </li>
+          <li
+            class="page-item"
+            :class="{ disabled: end >= filteredProducts.length }"
+          >
+            <button class="page-link" @click="page++">Next</button>
+          </li>
+        </ul>
+      </nav>
+    </div>
   </div>
 </template>
 
@@ -74,7 +116,6 @@
 import { ref, computed, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
-import ProductCard from "../components/ProductCard.vue";
 
 const store = useStore();
 const route = useRoute();
@@ -136,4 +177,22 @@ const paginatedProducts = computed(() =>
 );
 
 const isLoading = computed(() => !store.getters.categories.length);
+
+const isFavorite = (id) => store.getters.favorites.some((p) => p.id === id);
+const toggleFavorite = (product) => {
+  store.dispatch("toggleFavorite", product);
+};
+
+const isValidImage = (url) => {
+  return /\.(jpe?g|png|svg)$/i.test(url);
+};
+
+const getProductImage = (product) => {
+  const img = product?.images?.[0];
+  if (img && isValidImage(img)) {
+    return img;
+  } else {
+    return "https://via.placeholder.com/80x60?text=No+Image";
+  }
+};
 </script>

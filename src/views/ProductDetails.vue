@@ -17,7 +17,7 @@
       </div>
       <div class="col-md-7">
         <h2>{{ product.title }}</h2>
-        <h4 class="text-muted mb-3">$ {{ product.price }}</h4>
+        <h4 class="mb-3">Price: ${{ product.price }}</h4>
         <p class="mb-3">{{ product.description }}</p>
         <span class="badge bg-secondary text-capitalize">{{
           product.category.name

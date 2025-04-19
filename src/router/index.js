@@ -12,12 +12,19 @@ const routes = [
     { path: '/products', name: 'Products', component: ProductListing },
     { path: '/product/:id', name: 'ProductDetails', component: ProductDetails, props: true },
     { path: '/favorites', name: 'Favorites', component: FavoritesPage }
-    // { path: '/:no-route(.*)', name: 'no-route', component: null }
 ];
 
 const router = createRouter({
     history: createWebHistory(),
     routes
+});
+
+router.afterEach(() => {
+    const nav = document.querySelector('.navbar-collapse');
+    if (nav && nav.classList.contains('show')) {
+        nav.classList.remove('show');
+        nav.style.height = null;
+    }
 });
 
 export default router;

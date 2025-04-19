@@ -47,14 +47,17 @@
 
     <div v-else>
       <div class="table-responsive">
-        <table class="table table-bordered align-middle">
-          <thead class="table-light">
+        <table
+          class="table align-middle table-hover"
+          :class="darkModeEnabled ? 'table-light' : 'table-dark'"
+        >
+          <thead class="table-dark">
             <tr>
               <th scope="col">Image</th>
               <th scope="col">Name</th>
               <th scope="col">Category</th>
               <th scope="col">Price</th>
-              <th scope="col">Actions</th>
+              <th scope="col" class="text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -74,7 +77,7 @@
               </td>
               <td>{{ product.category?.name || "N/A" }}</td>
               <td>${{ product.price }}</td>
-              <td>
+              <td class="text-center">
                 <button
                   class="btn btn-sm"
                   :class="
@@ -84,7 +87,7 @@
                   "
                   @click="toggleFavorite(product)"
                 >
-                  {{ isFavorite(product.id) ? "Remove favorite" : "⭐" }}
+                  {{ isFavorite(product.id) ? "Remove from favorite" : "⭐" }}
                 </button>
               </td>
             </tr>
@@ -161,6 +164,29 @@ const filteredProducts = computed(() => {
   return result;
 });
 
+const start = computed(() => (page.value - 1) * perPage);
+const end = computed(() => start.value + perPage);
+const paginatedProducts = computed(() =>
+  filteredProducts.value.slice(start.value, end.value)
+);
+
+const isLoading = computed(() => !store.getters.categories.length);
+const darkModeEnabled = computed(() => !store.getters.darkMode);
+
+const isFavorite = (id) => store.getters.favorites.some((p) => p.id === id);
+const toggleFavorite = (product) => {
+  store.dispatch("toggleFavorite", product);
+};
+
+const isValidImage = (url) => /\.(jpe?g|png|svg)$/i.test(url);
+
+const getProductImage = (product) => {
+  const img = product?.images?.[0];
+  return img && isValidImage(img)
+    ? img
+    : "https://via.placeholder.com/80x60?text=No+Image";
+};
+
 watch(
   () => route.query.categoryId,
   (newId) => {
@@ -169,30 +195,4 @@ watch(
     page.value = 1;
   }
 );
-
-const start = computed(() => (page.value - 1) * perPage);
-const end = computed(() => start.value + perPage);
-const paginatedProducts = computed(() =>
-  filteredProducts.value.slice(start.value, end.value)
-);
-
-const isLoading = computed(() => !store.getters.categories.length);
-
-const isFavorite = (id) => store.getters.favorites.some((p) => p.id === id);
-const toggleFavorite = (product) => {
-  store.dispatch("toggleFavorite", product);
-};
-
-const isValidImage = (url) => {
-  return /\.(jpg|jpeg|png|svg)$/i.test(url);
-};
-
-const getProductImage = (product) => {
-  const img = product?.images?.[0];
-  if (img && isValidImage(img)) {
-    return img;
-  } else {
-    return "https://via.placeholder.com/80x60?text=No+Image";
-  }
-};
 </script>

@@ -6,6 +6,13 @@
       <CategoryCard v-for="cat in categories" :key="cat" :category="cat" />
     </div>
 
+    <div v-if="isLoading" class="text-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <h6>Loading...</h6>
+    </div>
+
     <div v-if="favorites.length" class="mb-5">
       <h2 class="text-center full-pill-heading">Favorites</h2>
       <div class="row row-cols-1 row-cols-md-4 g-4">

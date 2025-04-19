@@ -24,10 +24,10 @@
         }}</span>
         <div class="mt-4">
           <button class="btn btn-outline-warning" @click="toggleFavorite">
-            <span :class="isFavorited ? 'text-warning' : 'text-secondary'"
-              ></span
-            >
-            Add to Favorite
+            <span :class="isFavorited ? 'text-warning' : 'text-secondary'">
+              Add to Favorite
+            </span>
+            ⭐
           </button>
         </div>
       </div>

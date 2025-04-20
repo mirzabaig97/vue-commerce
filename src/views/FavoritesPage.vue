@@ -1,19 +1,3 @@
-<script setup>
-import ProductTable from "../components/ProductTable.vue";
-import { computed } from "vue";
-import { useStore } from "vuex";
-
-const store = useStore();
-const favorites = computed(() => store.getters.favorites.reverse());
-
-const removeFavorite = (product) => {
-  store.dispatch("toggleFavorite", product);
-};
-const removeAllFavorites = () => {
-  store.dispatch("clearFavorites");
-};
-</script>
-
 <template>
   <div class="container py-4">
     <h1 class="mb-4 text-center full-pill-heading">Your Favorites</h1>
@@ -43,3 +27,19 @@ const removeAllFavorites = () => {
     </div>
   </div>
 </template>
+
+<script setup>
+import ProductTable from "../components/product/ProductTable.vue";
+import { computed } from "vue";
+import { useStore } from "vuex";
+
+const store = useStore();
+const favorites = computed(() => store.getters.favorites.reverse());
+
+const removeFavorite = (product) => {
+  store.dispatch("toggleFavorite", product);
+};
+const removeAllFavorites = () => {
+  store.dispatch("clearFavorites");
+};
+</script>

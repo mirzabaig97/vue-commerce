@@ -1,5 +1,7 @@
+<!-- src/views/ProductDetails.vue -->
 <template>
   <div class="container py-4">
+    <!-- Check if product exists -->
     <div v-if="product">
       <div class="row">
         <div class="col-md-5">
@@ -37,6 +39,7 @@
       </div>
     </div>
 
+    <!-- Show message if product doesn't exist -->
     <div v-else class="text-center py-5">
       <h2>Product Not Found</h2>
       <p class="lead">Sorry, the product you are looking for doesn't exist.</p>
@@ -56,8 +59,10 @@ const route = useRoute();
 const store = useStore();
 const loaded = ref(false);
 
+// Get the product based on the route ID
 const product = computed(() => store.getters.getProductById(route.params.id));
 
+// Save to last visited
 onMounted(() => {
   if (product.value) {
     store.dispatch("addToLastVisited", product.value);

@@ -47,8 +47,8 @@
 <script setup>
 import { computed } from "vue";
 import { useStore } from "vuex";
-import CategoryCard from "../components/CategoryCard.vue";
-import ProductCard from "../components/ProductCard.vue";
+import CategoryCard from "../components/category/CategoryCard.vue";
+import ProductCard from "../components/product/ProductCard.vue";
 
 const store = useStore();
 

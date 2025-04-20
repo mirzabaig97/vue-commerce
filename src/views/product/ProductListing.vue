@@ -6,12 +6,7 @@
 
     <div class="row mb-3" v-if="!isLoading && allProducts.length">
       <div class="col-md-6">
-        <input
-          v-model="searchQuery"
-          type="text"
-          class="form-control"
-          placeholder="Search products..."
-        />
+        <SearchBar v-model="searchQuery" placeholder="Search products..." />
       </div>
       <div class="col-md-6 text-md-end mt-2 mt-md-0">
         <select class="form-select w-auto d-inline" v-model="sortBy">
@@ -24,12 +19,7 @@
       </div>
     </div>
 
-    <div v-if="isLoading" class="text-center my-5">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-      <h3>Loading...</h3>
-    </div>
+    <LoadingSpinner v-if="isLoading" message="Loading..." />
 
     <ProductTable
       v-if="Array.isArray(filteredProducts) && filteredProducts.length"
@@ -67,22 +57,11 @@
       </router-link>
     </div>
 
-    <nav class="mt-4" v-if="filteredProducts.length > perPage">
-      <ul class="pagination justify-content-center">
-        <li class="page-item" :class="{ disabled: page === 1 }">
-          <button class="page-link" @click="page--">Previous</button>
-        </li>
-        <li class="page-item disabled">
-          <span class="page-link">Page {{ page }}</span>
-        </li>
-        <li
-          class="page-item"
-          :class="{ disabled: end >= filteredProducts.length }"
-        >
-          <button class="page-link" @click="page++">Next</button>
-        </li>
-      </ul>
-    </nav>
+    <ListPagination
+      v-model:page="page"
+      :perPage="perPage"
+      :total="filteredProducts.length"
+    />
   </div>
 </template>
 
@@ -90,7 +69,10 @@
 import { ref, computed, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
-import ProductTable from "../components/ProductTable.vue";
+import ProductTable from "../../components/product/ProductTable.vue";
+import SearchBar from "../../components/widgets/SearchBar.vue";
+import ListPagination from "../../components/widgets/ListPagination.vue";
+import LoadingSpinner from "../../components/widgets/LoadingSpinner.vue";
 
 const store = useStore();
 const route = useRoute();

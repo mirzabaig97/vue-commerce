@@ -33,7 +33,7 @@ Bootstrap: Styling framework for responsive design.
 
 Vue Router: For client-side routing.
 
--- Does not have a modular space structure --
+-- Does not have a modular vuex namespace structure since it is a small scoped project --
 
 ## Recommended IDE Setup
 

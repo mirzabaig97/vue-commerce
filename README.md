@@ -43,6 +43,12 @@ Vue Router: For client-side routing.
 
 See [Vite Configuration Reference](https://vite.dev/config/).
 
+## Clone project
+
+```sh
+git clone https://github.com/mirzabaig97/vue-commerce.git
+```
+
 ## Project Setup
 
 ```sh

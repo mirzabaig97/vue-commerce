@@ -27,6 +27,6 @@ export default {
     setDarkMode(state, isDark) {
         state.darkMode = isDark;
         localStorage.setItem('darkMode', JSON.stringify(isDark));
-        document.body.classList.toggle('dark-mode', isDark); 
+        document.body.classList.toggle('dark-mode', isDark);
     },
 };

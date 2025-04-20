@@ -2,18 +2,9 @@
   <div class="container py-4">
     <h1 class="mb-4 text-center full-pill-heading">Browse Categories</h1>
 
-    <input
-      v-model="searchTerm"
-      type="text"
-      class="form-control mt-3"
-      placeholder="Search categories..."
-    />
+    <SearchBar v-model="searchTerm" placeholder="Search products..." />
 
-    <div v-if="isLoading" class="text-center my-5">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-    </div>
+    <LoadingSpinner v-if="isLoading" />
 
     <div v-else class="row row-cols-2 row-cols-md-4 g-4 mb-3 mt-4">
       <CategoryCard
@@ -23,33 +14,25 @@
       />
     </div>
 
-    <nav class="mt-4" v-if="filteredCategories.length > perPage">
-      <ul class="pagination justify-content-center">
-        <li class="page-item" :class="{ disabled: page === 1 }">
-          <button class="page-link" @click="page--">Previous</button>
-        </li>
-        <li class="page-item disabled">
-          <span class="page-link">Page {{ page }}</span>
-        </li>
-        <li
-          class="page-item"
-          :class="{ disabled: end >= filteredCategories.length }"
-        >
-          <button class="page-link" @click="page++">Next</button>
-        </li>
-      </ul>
-    </nav>
+    <ListPagination
+      v-model:page="page"
+      :perPage="perPage"
+      :total="filteredCategories.length"
+    />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
-import CategoryCard from "../components/CategoryCard.vue";
+import CategoryCard from "../../components/category/CategoryCard.vue";
+import SearchBar from "../../components/widgets/SearchBar.vue";
+import ListPagination from "../../components/widgets/ListPagination.vue";
+import LoadingSpinner from "../../components/widgets/LoadingSpinner.vue";
 
 const store = useStore();
 
-const perPage = 8;
+const perPage = 4;
 const page = ref(1);
 const searchTerm = ref("");
 

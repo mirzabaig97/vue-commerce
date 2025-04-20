@@ -1,6 +1,9 @@
 import axios from 'axios';
 
 export default {
+    fetchCategories({ dispatch }) {
+        return dispatch("initCategoriesAndProducts");
+    },
     async initCategoriesAndProducts({ commit, state }) {
         try {
             const res = await axios.get("https://api.escuelajs.co/api/v1/categories?offset=0&limit=20");

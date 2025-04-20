@@ -16,6 +16,8 @@ Product Listing: Browse a variety of products.
 
 Categories: Filter products by category.
 
+Last Viewed Product: Opening up a product will save it in last viewed and show on homepage below categories.
+
 Favorites: Add products to favorites and view them later.
 
 Dark Mode: Toggle between light and dark modes for a better user experience.

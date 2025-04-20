@@ -72,3 +72,4 @@ function toggleFavorite() {
   store.dispatch("toggleFavorite", props.product);
 }
 </script>
+

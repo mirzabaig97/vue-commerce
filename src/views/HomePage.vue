@@ -18,8 +18,12 @@
       class="mb-5 border-top pt-4"
     >
       <h2 class="text-center full-pill-heading mb-4">Last Visited</h2>
-      <div class="row row-cols-1 row-cols-md-4 g-4">
-        <div class="col" v-for="product in lastVisited" :key="product.id">
+      <div class="row g-4">
+        <div
+          class="col-6 col-md-3 d-flex align-items-stretch"
+          v-for="product in lastVisited"
+          :key="product.id"
+        >
           <ProductCard :product="product" showCategory />
         </div>
       </div>
@@ -27,8 +31,12 @@
 
     <section v-if="favorites.length" class="mb-5 border-top pt-4">
       <h2 class="text-center full-pill-heading mb-4">Favorites</h2>
-      <div class="row row-cols-1 row-cols-md-4 g-4">
-        <div class="col" v-for="product in favorites" :key="product.id">
+      <div class="row g-4">
+        <div
+          class="col-6 col-md-3 d-flex align-items-stretch"
+          v-for="product in favorites"
+          :key="product.id"
+        >
           <ProductCard :product="product" showCategory />
         </div>
       </div>
@@ -45,6 +53,6 @@ import ProductCard from "../components/ProductCard.vue";
 const store = useStore();
 
 const categories = computed(() => store.getters.categories);
-const favorites = computed(() => store.getters.favorites);
+const favorites = computed(() => store.getters.favorites.slice(-5).reverse());
 const lastVisited = computed(() => store.getters.lastVisited);
 </script>
